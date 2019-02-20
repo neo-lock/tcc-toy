@@ -1,7 +1,7 @@
 # tcc-toy
 tcc-transaction sprint boot starter 
 
-`可以通过邮件 wycoolcool@126.com 联系我`
+`有疑问可以通过邮件 wycoolcool@126.com 联系我`
 
 ## 简介
 * 非侵入式开发
