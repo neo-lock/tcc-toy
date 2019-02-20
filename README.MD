@@ -1,7 +1,7 @@
 # tcc-toy
 tcc-transaction sprint boot starter 
 
-`可以通过邮件wycoolcool@126.com联系我`
+`可以通过邮件 wycoolcool@126.com 联系我`
 
 ## 简介
 * 非侵入式开发
@@ -49,7 +49,6 @@ public void addScore(String accountId, int score, String orderNo, ScoreSource or
 
 ## 演示
 
-	
 ### tcc-toy-support 中mysql 表结构
     CREATE TABLE `${your table name}` (
       `tid` varchar(45) NOT NULL,
