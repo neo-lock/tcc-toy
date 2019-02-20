@@ -7,18 +7,18 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class OrderRequest {
-	
-	private String buyerId;
+@Getter
+public class Products {
 
-	private int productId;
-	
-	private int amount;
-	
-	private int totalPrice;
-	
+    private int id;
 
-	
+    private int amount;
+
+    private long version;
+
+    public void updateVersion(){
+        this.version += 1;
+    }
+
 }

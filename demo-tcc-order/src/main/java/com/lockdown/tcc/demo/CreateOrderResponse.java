@@ -1,30 +1,18 @@
 package com.lockdown.tcc.demo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class CreateOrderResponse {
 	
 	private String orderNo;
 	private OrderStatus status;
-	
-	
-	
-	public CreateOrderResponse(String orderNo, OrderStatus status) {
-		super();
-		this.orderNo = orderNo;
-		this.status = status;
-	}
-	public String getOrderNo() {
-		return orderNo;
-	}
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
-	public OrderStatus getStatus() {
-		return status;
-	}
-	public void setStatus(OrderStatus status) {
-		this.status = status;
-	}
-	
-	
+
 	
 }

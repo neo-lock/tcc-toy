@@ -19,6 +19,7 @@
         <module>tcc-toy-support</module>
         <module>demo-eureka-server</module>
         <module>demo-tcc-score</module>
+        <module>demo-tcc-products</module>
     </modules>
 
     <build>

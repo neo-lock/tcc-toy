@@ -25,7 +25,7 @@ public class SimpleOptimisticLockManager implements OptimisticLockManager {
 
 	@Override
 	public int create(TccTransaction transaction) {
-		logger.debug("{} create tcc transaction {}",LogUtils.LOG_PREFFIX,transaction.transactionId());
+		logger.debug("{} create tcc transaction {}",LogUtils.LOG_PREFIX,transaction.transactionId());
 		return repository.create(transaction);
 	}
 	
@@ -33,7 +33,7 @@ public class SimpleOptimisticLockManager implements OptimisticLockManager {
 
 	@Override
 	public int update(TccTransaction transaction) {
-		logger.debug("{} update tcc transaction {}",LogUtils.LOG_PREFFIX,transaction.transactionId());
+		logger.debug("{} update tcc transaction {}",LogUtils.LOG_PREFIX,transaction.transactionId());
 		int result = repository.update(transaction);
 		validateResult(result);
 		return result;
@@ -42,13 +42,13 @@ public class SimpleOptimisticLockManager implements OptimisticLockManager {
 
 	@Override
 	public int delete(TccTransaction transaction) {
-		logger.debug("{} delete tcc transaction {}",LogUtils.LOG_PREFFIX,transaction.transactionId());
+		logger.debug("{} delete tcc transaction {}",LogUtils.LOG_PREFIX,transaction.transactionId());
 		return repository.delete(transaction);
 	}
 
 	@Override
 	public TccTransaction findTransaction(TransactionId id) {
-		logger.debug("{} find tcc transaction {}",LogUtils.LOG_PREFFIX,id);
+		logger.debug("{} find tcc transaction {}",LogUtils.LOG_PREFIX,id);
 		return repository.findTransaction(id);
 	}
 

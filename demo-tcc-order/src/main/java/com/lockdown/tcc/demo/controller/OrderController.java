@@ -34,8 +34,8 @@ public class OrderController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/order/pay",method=RequestMethod.POST)
-	public void perparedOrderPay(@RequestBody OrderPayRequest request) throws Exception{
-		orderService.perparedPay(request.getOrderNo(),request.isPaySuccess());
+	public void preparedOrderPay(@RequestBody OrderPayRequest request) throws Exception{
+		orderService.preparedPay(request.getOrderNo(),request.isPaySuccess());
 	}
 
 }

@@ -36,7 +36,7 @@ public class TccTransactionAspect{
 	@Around("@annotation(com.lockdown.tcctoy.core.ATccTransaction)")
 	public Object around(ProceedingJoinPoint pjp) throws Throwable{;
 		TransactionPermit permit = RequestUtils.getValidRequestPermit();
-		logger.info("{} current transaction permit {}",LogUtils.LOG_PREFFIX,permit);
+		logger.info("{} current transaction permit {}",LogUtils.LOG_PREFIX,permit);
 		return transactionProcessor.processTransaction(pjp,permit);
 	}
 	

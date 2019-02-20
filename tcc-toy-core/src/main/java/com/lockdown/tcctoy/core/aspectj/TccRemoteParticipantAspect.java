@@ -41,7 +41,7 @@ public class TccRemoteParticipantAspect{
 					transaction.getTransactionStatus(),
 					TccSignatureUtils.remoteSignature(((MethodSignature)pjp.getSignature()).getMethod()));
 			
-			logger.info("{} remote permit {}",LogUtils.LOG_PREFFIX,TccTransactionManager.getRemotePermit());
+			logger.info("{} remote permit {}",LogUtils.LOG_PREFIX,TccTransactionManager.getRemotePermit());
 			
 			return pjp.proceed(pjp.getArgs());
 		}finally {

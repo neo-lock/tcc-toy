@@ -2,20 +2,18 @@ package com.lockdown.tcctoy.starter;
 
 import javax.sql.DataSource;
 
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.util.StringUtils;
 
 import com.lockdown.tcctoy.support.JdbcTransactionRepository;
@@ -143,7 +141,8 @@ public class TccToyAutoConfiguration {
 	public SpringBeanUtils springBeanUtils() {
 		return new SpringBeanUtils();
 	}
-	
+
+
 	
 	@Bean
     public JobDetail myJobDetail(){
@@ -157,12 +156,13 @@ public class TccToyAutoConfiguration {
 	
 	
     @Bean
+	@ConditionalOnProperty(prefix = "tcc.transaction",name = "enable-recovery",havingValue = "true",matchIfMissing = false)
     public Trigger myTrigger(){
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(myJobDetail())
                 .withIdentity("recoveryTrigger","RecoveryTransaction")
                 .startNow()
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(properties.getRecoveIntervalSeconds()).repeatForever())
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(properties.getRecoverIntervalSeconds()).repeatForever())
                 .build();
         return trigger;
     }

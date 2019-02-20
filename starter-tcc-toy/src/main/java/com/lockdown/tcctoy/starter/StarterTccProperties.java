@@ -15,11 +15,19 @@ public class StarterTccProperties implements TccTransactionProperties{
 	
 	private int limitRetry = 5;
 	
-	private int recoveIntervalSeconds = 30;
+	private int recoverIntervalSeconds = 30;
 	
 	private String tableName;
 
-	
+	private boolean enableRecovery = true;
+
+	public boolean isEnableRecovery() {
+		return enableRecovery;
+	}
+
+	public void setEnableRecovery(boolean enableRecovery) {
+		this.enableRecovery = enableRecovery;
+	}
 
 	public String getTableName() {
 		return tableName;
@@ -29,12 +37,12 @@ public class StarterTccProperties implements TccTransactionProperties{
 		this.tableName = tableName;
 	}
 
-	public int getRecoveIntervalSeconds() {
-		return recoveIntervalSeconds;
+	public int getRecoverIntervalSeconds() {
+		return recoverIntervalSeconds;
 	}
 
-	public void setRecoveIntervalSeconds(int recoveIntervalSeconds) {
-		this.recoveIntervalSeconds = recoveIntervalSeconds;
+	public void setRecoverIntervalSeconds(int recoverIntervalSeconds) {
+		this.recoverIntervalSeconds = recoverIntervalSeconds;
 	}
 
 	public String getDomain() {

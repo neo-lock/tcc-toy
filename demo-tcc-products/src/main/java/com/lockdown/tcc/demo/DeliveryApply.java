@@ -5,20 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class OrderRequest {
-	
-	private String buyerId;
+public class DeliveryApply {
 
-	private int productId;
-	
-	private int amount;
-	
-	private int totalPrice;
-	
+    private int pid;
+    private int amount;
+    private String orderNo;
+    private String buyerId;
 
-	
+
+
+
 }

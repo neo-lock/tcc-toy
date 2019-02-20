@@ -7,7 +7,7 @@ public interface OrderService {
 
 	CreateOrderResponse generateOrder(OrderRequest request) throws Exception;
 
-	void perparedPay(String orderNo, boolean paySuccess) throws Exception ;
+	void preparedPay(String orderNo, boolean paySuccess) throws Exception ;
 
 	
 

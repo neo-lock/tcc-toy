@@ -12,8 +12,8 @@ public interface OrderRepository {
 	
 	public static final String TABLE_NAME = "t_order";
 
-	@Insert(" insert into "+TABLE_NAME +" (orderNo,buyerId,amount,totalPrice,status,prepareStatus,createTime,updateTime) "
-			+ " values (#{orderNo},#{buyerId},#{amount},#{totalPrice},#{status},#{prepareStatus},#{createTime},#{updateTime}) ")
+	@Insert(" insert into "+TABLE_NAME +" (orderNo,buyerId,productId,amount,totalPrice,status,prepareStatus,createTime,updateTime) "
+			+ " values (#{orderNo},#{buyerId},#{productId},#{amount},#{totalPrice},#{status},#{prepareStatus},#{createTime},#{updateTime}) ")
 	void createOrder(Order order) throws Exception;
 
 

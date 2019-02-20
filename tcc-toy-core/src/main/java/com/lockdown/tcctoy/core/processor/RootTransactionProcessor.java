@@ -32,7 +32,7 @@ public class RootTransactionProcessor implements TransactionTypeProcessor {
 				}catch(TransactionRollbackException ex) {
 					//如果是根事务，并且没有分支，意味着，本地服务调用远程服务失败，没在远程服务创建事务，此时可以尝试立即删除，不需要恢复
 					if(transaction.getTransactionType() == TccTransactionType.ROOT) {
-						logger.info("{} root transaction rollback failed, try to delete if no children !",LogUtils.LOG_PREFFIX);
+						logger.info("{} root transaction rollback failed, try to delete if no children !",LogUtils.LOG_PREFIX);
 						TccTransactionManager.tryToDelete(transaction);
 					}
 				}

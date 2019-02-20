@@ -4,6 +4,7 @@ package com.lockdown.tcc.demo.service;
 import java.util.Date;
 import java.util.UUID;
 
+import com.lockdown.tcc.demo.remote.RemoteProductsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class BaseOrderService implements OrderService {
 	
 	@Autowired
 	private RemoteScoreService remoteScoreService;
+
+	@Autowired
+	private RemoteProductsService remoteProductsService;
 
 	
 
@@ -62,7 +66,7 @@ public class BaseOrderService implements OrderService {
 	@ATccTransaction(confirmMethodName="confirmOrder",cancelMethodName="cancelOrder")
 	@Transactional
 	@Override
-	public void perparedPay(String orderNo, boolean paySuccess) throws Exception {
+	public void preparedPay(String orderNo, boolean paySuccess) throws Exception {
 		Order order = getOrder(orderNo);
 		if(order.getStatus().getValue()>OrderStatus.PAYING.getValue()) {
 			return;
@@ -71,6 +75,7 @@ public class BaseOrderService implements OrderService {
 		orderRepository.updatePrepareStatus(order);
 		if(paySuccess) {
 			remoteScoreService.preparedAddScore(order.getBuyerId(),order.getTotalPrice(),order.getOrderNo());
+			remoteProductsService.deliveryProduct(order.getProductId(),order.getAmount(),order.getOrderNo(),order.getBuyerId());
 		}
 	}
 	
@@ -93,6 +98,7 @@ public class BaseOrderService implements OrderService {
 		order.setUpdateTime(new Date());
 		order.setCreateTime(new Date());
 		order.setBuyerId(request.getBuyerId());
+		order.setProductId(request.getProductId());
 		order.setOrderNo(UUID.randomUUID().toString());
 		order.setPrepareStatus(OrderStatus.CREATED);
 		order.setStatus(OrderStatus.CREATED);
