@@ -1,10 +1,13 @@
 # tcc-toy
 tcc-transaction sprint boot starter 
 
+`可以通过邮件wycoolcool@126.com联系我`
+
 ## 简介
 * 非侵入式开发
 * 与feign集成
-* 简单
+* 可以方便的集成自定义starter
+* 集群支持
 
 ## tcc-toy-api
 	接口定义
@@ -44,18 +47,20 @@ public void addScore(String accountId, int score, String orderNo, ScoreSource or
 
 ### `请注意参与事务的接口需要自己实现幂等`
 
+## 演示
+
 	
 ### tcc-toy-support 中mysql 表结构
-		CREATE TABLE `${your table name}` (
-		  `tid` varchar(45) NOT NULL,
-		  `branchQualifier` varchar(45) NOT NULL DEFAULT '',
-		  `transactionType` varchar(25) NOT NULL,
-		  `transactionStatus` varchar(25) NOT NULL,
-		  `version` int(11) NOT NULL DEFAULT '1',
-		  `invokeCount` int(11) NOT NULL DEFAULT '0',
-		  `createTime` timestamp NULL DEFAULT NULL,
-		  `updateTime` timestamp NULL DEFAULT NULL,
-		  `content` blob NOT NULL,
-		  `domain` varchar(45) NOT NULL,
-		  PRIMARY KEY (`tid`,`branchQualifier`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    CREATE TABLE `${your table name}` (
+      `tid` varchar(45) NOT NULL,
+      `branchQualifier` varchar(45) NOT NULL DEFAULT '',
+      `transactionType` varchar(25) NOT NULL,
+      `transactionStatus` varchar(25) NOT NULL,
+      `version` int(11) NOT NULL DEFAULT '1',
+      `invokeCount` int(11) NOT NULL DEFAULT '0',
+      `createTime` timestamp NULL DEFAULT NULL,
+      `updateTime` timestamp NULL DEFAULT NULL,
+      `content` blob NOT NULL,
+      `domain` varchar(45) NOT NULL,
+      PRIMARY KEY (`tid`,`branchQualifier`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
