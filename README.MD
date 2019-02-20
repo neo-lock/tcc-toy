@@ -47,6 +47,11 @@ public void addScore(String accountId, int score, String orderNo, ScoreSource or
 
 ### `请注意参与事务的接口需要自己实现幂等`
 
+## 注意
+* 消费端在 confirm 和 cancel 有乐观锁的话，tcc-toy 会进行多次尝试，在try阶段则不会尝试
+* 如果自定了全局异常捕获，当消费服务产生错误的时候，tcc-toy不能捕获错误，需要自己定义feign的错误解析器ErrorDecoder并且抛出异常
+* TccTransactionRepository不能参与事务
+
 ## 演示
 
 ### tcc-toy-support 中mysql 表结构
