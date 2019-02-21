@@ -9,7 +9,8 @@ public interface TccTransactionProperties {
 
 	public int getLimitRetry();
 
-	
-	
+
+	public int getRecoverIntervalSeconds();
+
 	
 }

@@ -1,5 +1,6 @@
 package com.lockdown.tcctoy.support;
 
+
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -12,7 +13,8 @@ import com.lockdown.tcctoy.api.support.TccTransactionRecovery;
 public class QuartzTransactionRecovery extends QuartzJobBean{
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
+
 	@Autowired
 	private TccTransactionRecovery recovery;
 

@@ -2,18 +2,25 @@ package com.lockdown.tcctoy.starter;
 
 import javax.sql.DataSource;
 
-import org.quartz.*;
+import com.lockdown.tcctoy.support.SchedulerFactoryBeanListener;
+import org.quartz.spi.JobFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.util.StringUtils;
 
 import com.lockdown.tcctoy.support.JdbcTransactionRepository;
@@ -35,13 +42,24 @@ import com.lockdown.tcctoy.core.processor.TransactionTypeProcessor;
 import com.lockdown.tcctoy.core.util.SpringBeanUtils;
 
 import feign.RequestInterceptor;
+import org.terracotta.quartz.wrappers.JobFacade;
+
+import java.util.Objects;
+import java.util.Properties;
 
 @Configuration
-@EnableConfigurationProperties({StarterTccProperties.class})
+@EnableConfigurationProperties({StarterTccProperties.class,QuartzRecoverProperties.class})
 public class TccToyAutoConfiguration {
 	
 	@Autowired
 	private StarterTccProperties properties;
+
+	@Autowired
+	private QuartzRecoverProperties quartzRecoverProperties;
+
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	
 	@Bean
 	@Primary
@@ -143,31 +161,87 @@ public class TccToyAutoConfiguration {
 	}
 
 
-	
+	/**
+	 * 如果不开启enable,可以不需要当前properties
+	 * @return
+	 */
 	@Bean
-    public JobDetail myJobDetail(){
-        JobDetail jobDetail = JobBuilder.newJob(QuartzTransactionRecovery.class)
-                .withIdentity("recoveryJob","RecoveryTransaction")
-                .storeDurably()
-                .build();
-        return jobDetail;
-    }
-	
-	
-	
-    @Bean
-	@ConditionalOnProperty(prefix = "tcc.transaction",name = "enable-recovery",havingValue = "true",matchIfMissing = false)
-    public Trigger myTrigger(){
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .forJob(myJobDetail())
-                .withIdentity("recoveryTrigger","RecoveryTransaction")
-                .startNow()
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(properties.getRecoverIntervalSeconds()).repeatForever())
-                .build();
-        return trigger;
-    }
-    
-    
-	
+	@Primary
+	@ConditionalOnProperty(name = "tcc.transaction.recovery.quartz.enable",havingValue = "true",matchIfMissing = true)
+	@ConfigurationProperties("spring.quartz")
+	public QuartzProperties quartzProperties(){
+		return new QuartzProperties();
+	}
+
+
+
+	@Bean("recoverJobDetailFactoryBean")
+	public JobDetailFactoryBean jobDetailFactoryBean(ApplicationContext applicationContext){
+		JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+		jobDetailFactoryBean.setName(quartzRecoverProperties.getJobDetailName());
+		jobDetailFactoryBean.setGroup(properties.getDomain());
+		jobDetailFactoryBean.setApplicationContext(applicationContext);
+		jobDetailFactoryBean.setDurability(true);
+		jobDetailFactoryBean.setJobClass(QuartzTransactionRecovery.class);
+		return jobDetailFactoryBean;
+	}
+
+	@Bean("recoverTriggerFactoryBean")
+	public SimpleTriggerFactoryBean simpleTriggerFactoryBean(@Qualifier("recoverJobDetailFactoryBean") JobDetailFactoryBean recoverJobDetailFactoryBean){
+		SimpleTriggerFactoryBean simpleTriggerFactoryBean = new SimpleTriggerFactoryBean();
+		simpleTriggerFactoryBean.setGroup(properties.getDomain());
+		simpleTriggerFactoryBean.setJobDetail(Objects.requireNonNull(recoverJobDetailFactoryBean.getObject()));
+		simpleTriggerFactoryBean.setName(quartzRecoverProperties.getJobTriggerName());
+		simpleTriggerFactoryBean.setRepeatInterval(properties.getRecoverIntervalSeconds()*1000);
+		return simpleTriggerFactoryBean;
+	}
+
+
+	@Bean
+	public JobFactory jobFactory(){
+		return new TccQuartzJobBeanFactory();
+	}
+
+	@Bean
+	@Primary
+	public SchedulerFactoryBean schedulerFactoryBean(QuartzProperties quartzProperties,DataSource dataSource,ApplicationContext applicationContext,JobFactory jobFactory) {
+		SchedulerFactoryBean factory = new SchedulerFactoryBean();
+		factory.setWaitForJobsToCompleteOnShutdown(false);
+		factory.setOverwriteExistingJobs(true);
+		factory.setSchedulerName(quartzRecoverProperties.getSchedulerName());
+		factory.setJobFactory(jobFactory);
+		factory.setApplicationContext(applicationContext);
+		logger.info(" schedulerFactoryBean set properties !");
+		Properties properties = new Properties();
+		quartzProperties.getProperties().forEach(properties::setProperty);
+		factory.setQuartzProperties(properties);
+		logger.info(" schedulerFactoryBean set datasource !");
+		factory.setDataSource(dataSource);
+		applicationContext.getBeansOfType(SchedulerFactoryBeanListener.class).values().forEach(schedulerFactoryBeanListener -> schedulerFactoryBeanListener.schedulerFactoryBeanCreated(factory));
+		return factory;
+	}
+
+	@Bean
+	public SchedulerFactoryBeanListener recoverSchedulerListener(@Qualifier("recoverTriggerFactoryBean") SimpleTriggerFactoryBean simpleTriggerFactoryBean){
+		return bean -> {
+			bean.setAutoStartup(quartzRecoverProperties.isEnable());
+			if(quartzRecoverProperties.isEnable()){
+				bean.setTriggers(simpleTriggerFactoryBean.getObject());
+			}
+		};
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 }

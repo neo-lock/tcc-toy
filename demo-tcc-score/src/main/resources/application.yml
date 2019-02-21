@@ -8,28 +8,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: service-score
-  quartz:
-    job-store-type: jdbc
-    jdbc:
-      initialize-schema: embedded
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: MyScheduler
-            instanceId: AUTO
-          jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            tablePrefix: QRTZ_
-            isClustered: true
-            clusterCheckinInterval: 10000
-            useProperties: false
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
 
 eureka:
   client:
@@ -48,8 +26,10 @@ tcc:
       password: root
       jdbc-url: jdbc:mysql://localhost:3306/d_transaction?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
       driver-class-name: com.mysql.cj.jdbc.Driver
-    enable-recovery: false
-      
+    recovery:
+      quartz:
+        enable: false
+
 
       
 

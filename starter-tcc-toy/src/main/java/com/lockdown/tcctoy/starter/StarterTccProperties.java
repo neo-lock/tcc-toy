@@ -10,23 +10,49 @@ public class StarterTccProperties implements TccTransactionProperties{
 
 	@Value("${spring.application.name}")
 	private String domain;
-	
-	private long beforeSeconds = 60*30;
-	
-	private int limitRetry = 5;
-	
-	private int recoverIntervalSeconds = 30;
-	
+
 	private String tableName;
 
-	private boolean enableRecovery = true;
+	private long beforeSeconds = 60*30;
 
-	public boolean isEnableRecovery() {
-		return enableRecovery;
+	private int limitRetry = 5;
+
+	private int recoverIntervalSeconds = 30;
+
+	@Override
+	public long getBeforeSeconds() {
+		return beforeSeconds;
 	}
 
-	public void setEnableRecovery(boolean enableRecovery) {
-		this.enableRecovery = enableRecovery;
+	public void setBeforeSeconds(long beforeSeconds) {
+		this.beforeSeconds = beforeSeconds;
+	}
+
+	@Override
+	public int getLimitRetry() {
+		return limitRetry;
+	}
+
+	public void setLimitRetry(int limitRetry) {
+		this.limitRetry = limitRetry;
+	}
+
+	@Override
+	public int getRecoverIntervalSeconds() {
+		return recoverIntervalSeconds;
+	}
+
+	public void setRecoverIntervalSeconds(int recoverIntervalSeconds) {
+		this.recoverIntervalSeconds = recoverIntervalSeconds;
+	}
+
+	@Override
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public String getTableName() {
@@ -36,42 +62,4 @@ public class StarterTccProperties implements TccTransactionProperties{
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
-
-	public int getRecoverIntervalSeconds() {
-		return recoverIntervalSeconds;
-	}
-
-	public void setRecoverIntervalSeconds(int recoverIntervalSeconds) {
-		this.recoverIntervalSeconds = recoverIntervalSeconds;
-	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
-
-	public long getBeforeSeconds() {
-		return beforeSeconds;
-	}
-
-	public void setBeforeSeconds(long beforeSeconds) {
-		this.beforeSeconds = beforeSeconds;
-	}
-
-	public int getLimitRetry() {
-		return limitRetry;
-	}
-
-	public void setLimitRetry(int limitRetry) {
-		this.limitRetry = limitRetry;
-	}
-	
-	
-	
-	
-	
-
 }

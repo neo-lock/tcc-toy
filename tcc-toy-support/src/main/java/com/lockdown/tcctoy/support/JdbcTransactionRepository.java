@@ -35,20 +35,11 @@ public class JdbcTransactionRepository implements TccTransactionRepository {
 		this.tableName = tableName;
 	}
 	
-	
-	
-	
-	
-	
-	
+
 	
 	public void setSerializer(TccTransactionSerializer serializer) {
 		this.serializer = serializer;
 	}
-
-
-
-
 
 
 	public void setDatasource(DataSource datasource) {
