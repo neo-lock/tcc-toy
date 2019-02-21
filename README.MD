@@ -1,8 +1,6 @@
 # tcc-toy
 tcc-transaction sprint boot starter 
 
-`有疑问可以通过邮件 wycoolcool@126.com 联系我`
-
 ## 简介
 * 非侵入式开发
 * 与feign集成
@@ -68,3 +66,6 @@ public void addScore(String accountId, int score, String orderNo, ScoreSource or
       `domain` varchar(45) NOT NULL,
       PRIMARY KEY (`tid`,`branchQualifier`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+`有疑问可以通过邮件 wycoolcool@126.com 联系我`
