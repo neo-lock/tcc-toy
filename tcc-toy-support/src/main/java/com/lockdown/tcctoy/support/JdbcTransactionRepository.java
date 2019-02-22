@@ -118,6 +118,7 @@ public class JdbcTransactionRepository implements TccTransactionRepository {
 		PreparedStatement ps = null;
 		
 		try {
+
 			connection = datasource.getConnection();
 			StringBuilder sb = new StringBuilder(" UPDATE "+tableName+" SET transactionStatus = ?,version = ? ,invokeCount =  ? ,updateTime = ?,content = ? WHERE tid = ? AND branchQualifier = ? AND version = ? AND domain = ? ");
 			ps = connection.prepareStatement(sb.toString());

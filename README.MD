@@ -126,4 +126,4 @@ public void addScore(String accountId, int score, String orderNo, ScoreSource or
       PRIMARY KEY (`pid`,`orderNo`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-`有疑问可以通过邮件 wycoolcool@126.com 联系我`
+email:  wycoolcool@126.com

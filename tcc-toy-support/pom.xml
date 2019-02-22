@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.lockdown</groupId>
             <artifactId>tcc-toy-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
